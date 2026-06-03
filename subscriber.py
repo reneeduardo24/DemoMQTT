@@ -14,17 +14,21 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    # Crea un cliente MQTT
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="demo-sensor-subscriber")
 
+# Define que hacer cuando se conecta al broker MQTT
     def on_connect(client: mqtt.Client, userdata, flags, reason_code, properties) -> None:
         if reason_code == 0:
             print(f"Conectado a {args.host}:{args.port}")
             print(f"Suscrito a '{args.topic}' con QoS {args.qos}. Presiona Ctrl+C para salir.")
+            # Solicita al broker la suscripcion al topico configurado.
             client.subscribe(args.topic, qos=args.qos)
         else:
             print(f"No se pudo conectar. Codigo: {reason_code}")
 
     def on_message(client: mqtt.Client, userdata, message: mqtt.MQTTMessage) -> None:
+       # Recibe un mensaje en Bytes, lo decodifica a string
         payload = message.payload.decode("utf-8", errors="replace")
         print(f"Topico={message.topic} QoS={message.qos} Mensaje={payload}")
 

@@ -16,6 +16,8 @@ TOPICS = (
 
 
 def build_payload(topic: str) -> str:
+
+    # Divide el topico tomando el ultimo elemento
     sensor_type = topic.rsplit("/", 1)[-1]
     if sensor_type == "temperatura":
         value = round(random.uniform(18.0, 32.0), 2)
@@ -27,6 +29,7 @@ def build_payload(topic: str) -> str:
         value = round(random.uniform(990.0, 1030.0), 2)
         unit = "hPa"
 
+# Inicia la conversion de un diccionario Python a una cadena JSON y la retorna
     return json.dumps(
         {
             "sensor": topic,
